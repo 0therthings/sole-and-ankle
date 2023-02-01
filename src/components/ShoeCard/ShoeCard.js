@@ -29,10 +29,47 @@ const ShoeCard = ({
     ? 'on-sale'
     : isNewShoe(releaseDate)
       ? 'new-release'
-      : 'default'
+      : 'default';
 
+  const FLAGS = {
+    "on-sale": {
+      "--flagColor": COLORS.primary,
+      "--flagDisplay": "inline-block",
+      "--salesDisplay": "inline-block",
+      "--priceStyle": "line-through",
+      "--priceColor": COLORS.gray[700]
+    },
+    "new-release": {
+      "--flagColor": COLORS.secondary,
+      "--flagDisplay": "inline-block",
+      "--salesDisplay": "none",
+      "--priceStyle": "normal",
+      "--priceColor": "black"
+    },
+    "default": {
+      "--flagColor": "transparent",
+      "--flagDisplay": "none",
+      "--salesDisplay": "none",
+      "--priceStyle": "normal",
+      "--priceColor": "black"
+    }
+  };
+
+  const placeFlag = () => {
+    if(variant === "on-sale") {
+      return <Flag>Sale</Flag>;
+    }
+    else if(variant === "new-release") {
+      return <Flag>Just Released!</Flag>;
+    }
+    else {
+      return;
+    }
+  };
+
+  // Okay, I think all of this needs to be done through variables, though I'm feeling kind of stupid: regpricestyle and sales display
   return (
-    <Link href={`/shoe/${slug}`}>
+    <Link href={`/shoe/${slug}`} style={ FLAGS[variant] }>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
@@ -44,15 +81,20 @@ const ShoeCard = ({
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          <SalePrice>{formatPrice(salePrice)}</SalePrice>
         </Row>
+        {placeFlag()}
       </Wrapper>
     </Link>
   );
 };
 
 const Link = styled.a`
+  display: block;
+  position: relative;
   text-decoration: none;
   color: inherit;
+  flex: 1 1 340px;
 `;
 
 const Wrapper = styled.article``;
@@ -61,10 +103,14 @@ const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,7 +118,10 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  text-decoration: var(--priceStyle);
+  color: var(--priceColor);
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
@@ -81,6 +130,19 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+  display: var(--salesDisplay);
+`;
+
+const Flag = styled.span`
+  position: absolute;
+  display: var(--flagDisplay);
+  background-color: var(--flagColor);
+  padding: 7px 9px 9px 11px;
+  font-weight: bold;
+  color: white;
+  border-radius: 2px;
+  top: 12px;
+  right: -4px;
 `;
 
 export default ShoeCard;

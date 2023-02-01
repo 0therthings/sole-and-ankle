@@ -27,11 +27,26 @@ const Header = () => {
 };
 
 const MainHeader = styled.div`
-  padding: 0 32px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-around;
+  padding: 18px 32px 17px;
   border-bottom: 1px solid ${COLORS.gray[300]};
+  // Tried this first and it worked but found a cleaner way
+  // One big issue that's bothering me: logo is not clickable with width of 0
+  // &:after {
+  //   content: '';
+  //   display: flex;
+  //   flex: 1;
+  // }
 `;
 
-const Nav = styled.nav``;
+const Nav = styled.nav`
+  // flex: 3;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+`;
 
 const NavLink = styled.a`
   font-size: 1.125rem;
@@ -39,6 +54,8 @@ const NavLink = styled.a`
   text-decoration: none;
   color: ${COLORS.gray[900]};
   font-weight: ${WEIGHTS.medium};
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 
   &:first-of-type {
     color: ${COLORS.secondary};
